@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Запчасти из Японии и Кореи по VIN: подбор и цена за 30 минут</title>
+<meta name="description" content="Подберем автозапчасти из Японии и Кореи по VIN или номеру кузова. Работаем напрямую с поставщиками. Оставьте заявку и получите цену и срок.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Unbounded:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#13233A; --muted:#4C5B6D; --steel:#D9E0E7; --plate:#F3F5F7;
+  --edge:#9FB0C0; --red:#C8322B; --red-dark:#A92620; --blue:#1E4FA3;
+  --display:'Unbounded','Arial Black',sans-serif;
+  --body:'Golos Text',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--steel);color:var(--ink);font:400 17px/1.55 var(--body)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+
+header .wrap{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-top:22px;padding-bottom:22px}
+.brand{font:600 15px/1 var(--display);text-decoration:none}
+.contacts{display:flex;gap:10px;flex-wrap:wrap}
+.contacts a{padding:9px 16px;border:1.5px solid var(--ink);border-radius:999px;font-weight:500;font-size:15px;text-decoration:none}
+.contacts a:hover{background:var(--ink);color:#fff}
+
+.hero{display:grid;grid-template-columns:1.02fr .98fr;gap:56px;align-items:center;padding:36px 0 72px}
+h1{font:600 clamp(28px,4vw,46px)/1.14 var(--display);letter-spacing:-.01em;margin:0 0 22px;text-wrap:balance}
+.lead{font-size:19px;color:var(--muted);max-width:30em;margin:0 0 26px}
+.facts{list-style:none;margin:0;padding:0;display:grid;gap:10px;font-weight:500}
+.facts li{padding-left:22px;position:relative}
+.facts li::before{content:"";position:absolute;left:0;top:.6em;width:10px;height:2px;background:var(--red)}
+
+.plate{
+  position:relative;padding:44px 40px 40px;border-radius:20px;border:2px solid var(--edge);
+  box-shadow:inset 0 0 0 7px #F3F5F7,inset 0 0 0 8px var(--edge),0 28px 44px -28px rgba(19,35,58,.45);
+  background:
+    radial-gradient(circle 5px at 22px 22px,#A9B5C1 55%,#fff 62%,transparent 68%),
+    radial-gradient(circle 5px at calc(100% - 22px) 22px,#A9B5C1 55%,#fff 62%,transparent 68%),
+    radial-gradient(circle 5px at 22px calc(100% - 22px),#A9B5C1 55%,#fff 62%,transparent 68%),
+    radial-gradient(circle 5px at calc(100% - 22px) calc(100% - 22px),#A9B5C1 55%,#fff 62%,transparent 68%),
+    linear-gradient(160deg,#F9FAFB,#E4E9EE);
+}
+.plate h2{font:600 15px/1.3 var(--display);margin:0 0 22px}
+.field{display:block;margin-bottom:16px}
+.field span{display:block;font-size:14px;font-weight:500;margin-bottom:6px}
+.field small{display:block;font-size:13px;color:var(--muted);margin-top:6px;line-height:1.4}
+input,textarea{width:100%;font:400 16px/1.4 var(--body);color:var(--ink);background:#fff;border:1.5px solid var(--edge);border-radius:8px;padding:12px 14px}
+input:hover,textarea:hover{border-color:var(--ink)}
+textarea{resize:vertical;min-height:84px}
+.field input.vin{font-size:21px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:14px 14px;border-color:var(--ink);border-width:2px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--muted);margin:4px 0 20px}
+.consent input{width:18px;height:18px;margin-top:2px;flex:none;accent-color:var(--red)}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.btn{width:100%;border:0;border-radius:10px;background:var(--red);color:#fff;font:600 17px/1 var(--body);padding:17px 20px;cursor:pointer}
+.btn:hover{background:var(--red-dark)}
+.btn[disabled]{opacity:.7;cursor:progress}
+.note{font-size:13.5px;color:var(--muted);margin:12px 0 0;text-align:center}
+.err{color:#A4231D;font-weight:500;font-size:14.5px;margin:12px 0 0}
+.done h2{font-size:18px;margin-bottom:12px}
+.done p{margin:0 0 20px;color:var(--muted)}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--ink)}
+.btn.ghost:hover{background:var(--ink);color:#fff}
+[hidden]{display:none!important}
+
+.how{background:var(--plate);padding:64px 0 72px}
+.how h2{font:600 clamp(22px,3vw,30px)/1.2 var(--display);margin:0 0 36px}
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:28px}
+.steps li{border-top:3px solid var(--ink);padding-top:16px}
+.steps b{display:block;font:600 15px/1.3 var(--display);margin-bottom:8px}
+.steps span{color:var(--muted);font-size:16px}
+.steps .n{font:600 14px var(--display);color:var(--red);margin-bottom:10px;display:block}
+
+footer{padding:28px 0;font-size:14px;color:var(--muted)}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr;gap:36px;padding-bottom:48px}
+  .steps{grid-template-columns:1fr 1fr}
+}
+@media (max-width:520px){
+  body{font-size:16px}
+  .plate{padding:40px 24px 32px}
+  .row{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr}
+  .contacts a{padding:8px 13px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="brand" href="#">Подбор запчастей</a>
+    <nav class="contacts" aria-label="Связаться напрямую">
+      <a href="https://t.me/ONtheLINEPARTS" target="_blank" rel="noopener">Telegram</a>
+      <a href="https://wa.me/79147173000" target="_blank" rel="noopener">WhatsApp</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="wrap hero">
+    <div>
+      <h1>Запчасти из Японии и Кореи по вашему VIN</h1>
+      <p class="lead">Сверим номер по каталогу, назовем цену и срок. Заказываем напрямую у поставщиков.</p>
+      <ul class="facts">
+        <li>Подбор по VIN или номеру кузова</li>
+        <li>Ответим в рабочее время в течение 30 минут</li>
+        <li>Цена и срок до оплаты, без сюрпризов</li>
+      </ul>
+    </div>
+
+    <div class="plate" id="zayavka">
+      <form id="lead" novalidate>
+        <h2>Заявка на подбор</h2>
+
+        <label class="field">
+          <span>VIN или номер кузова</span>
+          <input class="vin" name="vin" required minlength="6" maxlength="25" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="JTDKB20U..." inputmode="text">
+          <small>У японских авто вместо VIN часто номер кузова, например GRX120-1234567. Он на шильдике в моторном отсеке и в ПТС.</small>
+        </label>
+
+        <label class="field">
+          <span>Какие запчасти нужны</span>
+          <textarea name="parts" required placeholder="Например: передние тормозные колодки, левая фара"></textarea>
+        </label>
+
+        <label class="field">
+          <span>Марка, модель, год</span>
+          <input name="car" placeholder="Toyota Camry, 2017">
+        </label>
+
+        <div class="row">
+          <label class="field">
+            <span>Имя</span>
+            <input name="name" required autocomplete="name">
+          </label>
+          <label class="field">
+            <span>Телефон или Telegram</span>
+            <input name="contact" required autocomplete="tel" placeholder="+7 ... или @ник">
+          </label>
+        </div>
+
+        <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+        <label class="consent">
+          <input type="checkbox" name="consent" required>
+          <span>Согласен на обработку персональных данных. <a href="#">Политика конфиденциальности</a></span>
+        </label>
+
+        <button class="btn" type="submit" id="send">Отправить заявку</button>
+        <p class="err" id="err" role="alert" hidden></p>
+        <p class="note">Подбор бесплатный. Оплата только после согласования цены.</p>
+      </form>
+
+      <div class="done" id="done" role="status" hidden>
+        <h2>Заявка принята</h2>
+        <p>Сверим VIN по каталогу и свяжемся с вами по указанному контакту.</p>
+        <button class="btn ghost" type="button" id="again">Отправить еще одну заявку</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="how">
+    <div class="wrap">
+      <h2>Как проходит подбор</h2>
+      <ol class="steps">
+        <li><span class="n">1</span><b>Вы отправляете VIN или номер кузова</b><span>И пишете, какие запчасти нужны.</span></li>
+        <li><span class="n">2</span><b>Мы сверяем по каталогу</b><span>Проверяем применимость к вашей комплектации.</span></li>
+        <li><span class="n">3</span><b>Называем цену и срок</b><span>Вы решаете, заказывать или нет.</span></li>
+        <li><span class="n">4</span><b>Заказываем и доставляем</b><span>Напрямую у поставщика в Японии или Корее.</span></li>
+      </ol>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© ONtheLINE PARTS</span>
+    <span>Telegram: @ONtheLINEPARTS, тел.: +7 914 717-30-00</span>
+  </div>
+</footer>
+
+<script>
+// Адрес веб-приложения Google Apps Script (заканчивается на /exec)
+const ENDPOINT = 'https://script.google.com/macros/s/AKfycbwWUbt8sxEwivqWAlCwIRd1U5WCUYXBsd-RPMz7qw7CO-vw6peT6bjqmgXybNn4zUJBDg/exec';
+
+const form = document.getElementById('lead');
+const done = document.getElementById('done');
+const err = document.getElementById('err');
+const send = document.getElementById('send');
+const vin = form.elements.vin;
+
+// Русские буквы, похожие на латинские, заменяем на латиницу (частая ошибка раскладки)
+const CYR = { 'А':'A','В':'B','Е':'E','К':'K','М':'M','Н':'H','О':'O','Р':'P','С':'C','Т':'T','Х':'X','У':'Y' };
+vin.addEventListener('input', () => {
+  vin.value = vin.value.toUpperCase()
+    .replace(/[АВЕКМНОРСТХУ]/g, ch => CYR[ch])
+    .replace(/[^A-Z0-9\-]/g, '');
+});
+
+function source() {
+  const q = new URLSearchParams(location.search);
+  const utm = ['utm_source', 'utm_medium', 'utm_campaign'].map(k => q.get(k)).filter(Boolean).join(' / ');
+  if (utm) return utm;
+  try { return document.referrer ? new URL(document.referrer).hostname : 'прямой заход'; }
+  catch (e) { return 'прямой заход'; }
+}
+
+function fail(msg) { err.textContent = msg; err.hidden = false; }
+
+form.addEventListener('submit', async e => {
+  e.preventDefault();
+  err.hidden = true;
+
+  if (!form.checkValidity()) {
+    form.reportValidity();
+    return;
+  }
+  if (form.elements.website.value) return; // бот
+
+  const data = new URLSearchParams(new FormData(form));
+  data.delete('consent');
+  data.set('utm_source', source());
+
+  send.disabled = true;
+  send.textContent = 'Отправляем…';
+  try {
+    await fetch(ENDPOINT, { method: 'POST', body: data, mode: 'no-cors' });
+    form.hidden = true;
+    done.hidden = false;
+    form.reset();
+  } catch (x) {
+    fail('Не удалось отправить заявку. Проверьте интернет или напишите нам в Telegram.');
+  } finally {
+    send.disabled = false;
+    send.textContent = 'Отправить заявку';
+  }
+});
+
+document.getElementById('again').addEventListener('click', () => {
+  done.hidden = true;
+  form.hidden = false;
+  vin.focus();
+});
+</script>
+</body>
+</html>
